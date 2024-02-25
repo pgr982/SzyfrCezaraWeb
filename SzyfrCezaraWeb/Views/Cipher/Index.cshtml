@@ -1,0 +1,58 @@
+﻿@model SzyfrCezaraWeb.Models.CipherModel
+
+<h2>Szyfr Cezara</h2>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <ul>
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+<form asp-action="Encrypt" method="post">
+
+    <div class="form-group">
+        <label asp-for="Text">Tekst:</label>
+        <textarea asp-for="Text" class="form-control" rows="10">@Model.Text</textarea>
+        <span asp-validation-for="Text" class="text-danger"></span>
+    </div>
+    <div class="form-group" style="margin-top: 20px;">
+        <label asp-for="Key">Klucz:</label>
+        <input asp-for="Key" class="form-control" style="width: 80px;" />
+        <span asp-validation-for="Key" class="text-danger"></span>
+    </div>
+    <div class="form-group" style="margin-top: 20px;">
+        <button type="submit" class="btn btn-primary">Encrypt</button>
+        <button formaction="@Url.Action("Decrypt", "Cipher")" class="btn btn-secondary">Decrypt</button>
+    </div>
+
+</form>
+
+@if (ViewBag.EncryptedText != null)
+{
+    <div class="result">
+        <label>Zaszyfrowany/odszyfrowany tekst:</label>
+        <textarea class="form-control" rows="10" readonly>@ViewBag.EncryptedText</textarea>
+    </div>
+}
+
+@if (ViewBag.DecryptedText != null)
+{
+    <div class="result">
+        <label>Zaszyfrowany/odszyfrowany tekst:</label>
+        <textarea class="form-control" rows="10" readonly>@ViewBag.DecryptedText</textarea>
+    </div>
+}
+
+@if ((ViewBag.EncryptedText == null) && (ViewBag.DecryptedText == null))
+{
+    <div class="result" style="margin-top: 20px;">
+        <label>Zaszyfrowany/odszyfrowany tekst:</label>
+        <textarea class="form-control" rows="10" readonly></textarea>
+    </div>
+}
